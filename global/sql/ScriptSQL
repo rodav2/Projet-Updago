@@ -1,0 +1,575 @@
+#------------------------------------------------------------
+#        Script MySQL.
+#------------------------------------------------------------
+
+
+#------------------------------------------------------------
+#        Création de la Base de données
+#------------------------------------------------------------
+
+CREATE DATABASE IF NOT EXISTS `updago` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `updago`;
+
+
+#------------------------------------------------------------
+#        Création des tables
+#------------------------------------------------------------
+
+DROP TABLE IF EXISTS `Formation`;
+CREATE TABLE IF NOT EXISTS `Formation`(
+        `idFormation`      int(11) NOT NULL AUTO_INCREMENT,
+        `libelleFormation` Varchar(25) NOT NULL,
+        `anneeFormation`   int(11) NOT NULL,
+        PRIMARY KEY (`idFormation`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Formation` WRITE;
+        INSERT INTO `Formation` 
+        (`libelleFormation`, `anneeFormation`) 
+        VALUES
+        ('L3Pro TLWTM', 2012),
+        ('L3Pro TLWTM', 2013),
+        ('L3Pro TLWTM', 2014),
+        ('Licence1 Informatique', 2014),
+        ('Licence2 Informatique', 2014),
+        ('Licence3 Informatique', 2014),
+        ('M1 IMMT', 2014),
+        ('M2 IMMT', 2013),
+        ('M2 IMMT', 2014);
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `Etudiant`;
+CREATE TABLE IF NOT EXISTS `Etudiant`(
+        `idEtudiant`            int(11) NOT NULL AUTO_INCREMENT,
+        `identifiantEtudiant`   Varchar(64) NOT NULL,
+        `mdpEtudiant`           Varchar(255) NOT NULL,
+        `nomEtudiant`           Varchar(64) NOT NULL,
+        `prenomEtudiant`        Varchar(64) NOT NULL,
+        `emailEtudiant`         Varchar(128) NOT NULL,
+        `telephoneEtudiant`     Varchar(25),
+        `sexeEtudiant`          boolean,
+        `photoEtudiant`         Varchar(255),
+        `dateNaissanceEtudiant` Datetime,
+        `idFormation`           int(11) NOT NULL,
+        PRIMARY KEY (`idEtudiant`),
+        UNIQUE KEY (`identifiantEtudiant`),
+        CONSTRAINT `FK_Etudiant_idFormation` 
+            FOREIGN KEY (`idFormation`) 
+            REFERENCES Formation(`idFormation`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+LOCK TABLES `Etudiant` WRITE;
+        INSERT INTO `Etudiant` 
+        (`identifiantEtudiant`, `mdpEtudiant`, `nomEtudiant`, `prenomEtudiant`, `emailEtudiant`, `telephoneEtudiant`, `sexeEtudiant`, `photoEtudiant`, `dateNaissanceEtudiant`, `idFormation`) 
+        VALUES
+        ('sbeauffreton', sha1(123), 'Beauffreton', 'Sandra', 'sbeauffreton@etu.univ-poitiers.com', '0505050505', false, NULL, '1992-03-12 18:34:00', 1),
+        ('mjuranville', sha1(123), 'Juranville', 'Mélody', 'mjuranville@etu.univ-poitiers.com', '0505050505', false, NULL , '1992-03-12 18:34:00', 1),
+        ('bduguy', sha1(123), 'Duguy', 'Bryan', 'bduguy@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('lbernard', sha1(123), 'Bernard', 'Lydie', 'lbernard@etu.univ-poitiers.com', '0505050505', false, NULL , '1992-03-12 18:34:00', 1),
+        ('fmartin', sha1(123), 'Martin', 'Franck', 'fmartin@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('smalveille', sha1(123), 'Malveille', 'Sébastien', 'smalveille@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('nfromenteau', sha1(123), 'Fromenteau', 'Nicolas', 'nfromenteau@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('mmabilleau', sha1(123), 'Mabilleau', 'Mickaël', 'mmabilleau@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('xlombion', sha1(123), 'Lombion', 'Xavier', 'xlombion@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('bvingrief', sha1(123), 'Vingrief', 'Benjamin', 'bvingrief@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('aserra', sha1(123), 'Serra', 'Arthur', 'aserra@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('ggarcia', sha1(123), 'Garcia', 'Guillaume', 'ggarcia@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('jpegue', sha1(123), 'Pegue', 'Jérome', 'jpegue@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('nbordage', sha1(123), 'Bordage', 'Nicolas', 'nbordage@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('jdumortier', sha1(123), 'Dumortier', 'Julien', 'jdumortier@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('jbienvenu', sha1(123), 'Bienvenu', 'Julien', 'jbienvenu@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('fmorin', sha1(123), 'Morin', 'Florian', 'fmorin@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('fortega', sha1(123), 'Ortega', 'Florian', 'fortega@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('jdupin', sha1(123), 'Dupin', 'Jonathan', 'jdupin@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('srenoir', sha1(123), 'Renoir', 'Sylvain', 'srenoir@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 1),
+        ('hhaddar', sha1(123), 'Haddar', 'Hamzar', 'hhaddar@etu.univ-poitiers.com', '0505050505', true, null, '1992-03-12 18:34:00', 3),
+        ('amontagne', sha1(123), 'Montagne', 'Alexis', 'amontagne@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('cnaud', sha1(123), 'Naud', 'Cyril', 'cnaud@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('bauzanneau', sha1(123), 'Auzanneau', 'Benjamin', 'bauzanneau@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('vcassair', sha1(123), 'Cassair', 'Valentin', 'vcassair@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('fmhum', sha1(123), 'Mhum', 'Florian', 'fmhum@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('hboutkhil', sha1(123), 'Boutkhil', 'Hind', 'hboutkhil@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('cadango', sha1(123), 'Adango Seveho', 'Cyrille', 'cadango@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('gtriki', sha1(123), 'Triki', 'Ghada', 'gtriki@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('jcornet', sha1(123), 'Cornet', 'Jérome', 'jcornet@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('cthomas', sha1(123), 'Thomas', 'Clément', 'cthomas@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('mterki', sha1(123), 'Terki', 'Messaoud', 'mterki@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('aghamnia', sha1(123), 'Ghamnia', 'Adel', 'aghamnia@etu.univ-poitiers.com', '0505050505', false, NULL , '1992-03-12 18:34:00', 3),
+        ('mtelmoun', sha1(123), 'Telmoun', 'Mahieddine', 'mtelmoun@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('gmazza', sha1(123), 'Mazza', 'Guido', 'gmazza@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3),
+        ('llatreche', sha1(123), 'Latreche', 'Labri', 'llatreche@etu.univ-poitiers.com', '0505050505', true, NULL , '1992-03-12 18:34:00', 3);
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `Matiere`;
+CREATE TABLE IF NOT EXISTS `Matiere`(
+        `idMatiere`      int(11) NOT NULL AUTO_INCREMENT,
+        `libelleMatiere` Varchar(25) NOT NULL,
+        PRIMARY KEY (`idMatiere`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Matiere` WRITE;
+        INSERT INTO `Matiere` 
+        (`libelleMatiere`) 
+        VALUES
+        ('Bureau d\'études'),
+        ('BDD'),
+        ('POO'),
+        ('Algorithmique');
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `Enseignant`;
+CREATE TABLE IF NOT EXISTS `Enseignant`(
+        `idEnseignant`            int(11) NOT NULL AUTO_INCREMENT,
+        `identifiantEnseignant`   Varchar(64) NOT NULL,
+        `mdpEnseignant`           Varchar(255) NOT NULL,
+        `nomEnseignant`           Varchar(64) NOT NULL,
+        `prenomEnseignant`        Varchar(64) NOT NULL,
+        `emailEnseignant`         Varchar(128) NOT NULL,
+        `telephoneEnseignant`     Varchar(25),
+        `sexeEnseignant`          boolean,
+        `photoEnseignant`         Varchar(255),
+        `dateNaissanceEnseignant` Datetime,
+        PRIMARY KEY (`idEnseignant`),
+        UNIQUE KEY (`identifiantEnseignant`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Enseignant` WRITE;
+        INSERT INTO `Enseignant` 
+        (`identifiantEnseignant`, `mdpEnseignant`, `nomEnseignant`, `prenomEnseignant`, `emailEnseignant`, `telephoneEnseignant`, `sexeEnseignant`, `photoEnseignant`, `dateNaissanceEnseignant`) 
+        VALUES
+        ('aarnould', sha1(123), 'Arnould', 'Agnès', 'aarnould@ens.univ-poitiers.com', '0505050505', false, NULL , '1975-03-12 00:00:00'),
+        ('sjean', sha1(123), 'Jean', 'Stéphane', 'sjean@ens.univ-poitiers.com', '0505050505', true, NULL , '1975-03-12 00:00:00'),
+        ('lfuchs', sha1(123), 'Fuchs', 'Laurent', 'lfuchs@ens.univ-poitiers.com', '0505050505', true, NULL , '1975-03-12 00:00:00'),
+        ('salayrangues', sha1(123), 'Alayrangues', 'Sylvie', 'salayrangues@ens.univ-poitiers.com', '0505050505', false, NULL , '1975-03-12 00:00:00'),
+        ('abergey', sha1(123), 'Bergey', 'Antoine', 'abergey@ens.univ-poitiers.com', '0505050505', true, NULL , '1975-03-12 00:00:00');
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `Devoir`;
+CREATE TABLE IF NOT EXISTS `Devoir`(
+        `idDevoir`                   int(11) NOT NULL AUTO_INCREMENT,
+        `libelleDevoir`              Varchar(64) NOT NULL,
+        `dateLimiteDevoir`           Datetime NOT NULL,
+        `descriptionDevoir`          Varchar(255) NOT NULL,
+        `dateLimiteCorrectionDevoir` Datetime,
+        `individuelDevoir`           boolean,
+        `idMatiere`                  int(11) NOT NULL,
+        `idEnseignant`               int(11) NOT NULL,
+        PRIMARY KEY(`idDevoir`),
+        CONSTRAINT `FK_Devoir_idMatiere` 
+            FOREIGN KEY (`idMatiere`) 
+            REFERENCES Matiere(`idMatiere`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+        CONSTRAINT `FK_Devoir_idEnseignant` 
+            FOREIGN KEY (`idEnseignant`) 
+            REFERENCES Enseignant(`idEnseignant`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Devoir` WRITE;
+        INSERT INTO `Devoir` 
+        (`libelleDevoir`, `dateLimiteDevoir`, `descriptionDevoir`, `dateLimiteCorrectionDevoir`, `individuelDevoir`, `idMatiere`, `idEnseignant`) 
+        VALUES
+        ('devoir BE', '2013-03-22 00:00:00', 'Etude, conception, et documentation d\'un projet', '2013-04-15 00:00:00', false, 1, 1),
+        ('Contrôle continu IDD', '2013-11-13 00:00:00', 'Compte rendu TP IDD', '2013-04-15 00:00:00', false, 2, 2);
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `LivrableAttendu`;
+CREATE TABLE IF NOT EXISTS `LivrableAttendu`(
+        `idLivrableAttendu`      int(11) NOT NULL AUTO_INCREMENT,
+        `libelleLivrableAttendu` Varchar(64) NOT NULL,
+        `dateLimiteLivrableAttendu`     Datetime NOT NULL,
+        `retardAutoriseLivrableAttendu` boolean DEFAULT TRUE NOT NULL,
+        `idDevoir`               int(11) NOT NULL,
+        PRIMARY KEY (`idLivrableAttendu`),
+        CONSTRAINT `FK_LivrableAttendu_idDevoir` 
+            FOREIGN KEY (`idDevoir`) 
+            REFERENCES Devoir(`idDevoir`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `LivrableAttendu` WRITE;
+        INSERT INTO `LivrableAttendu` 
+        (`libelleLivrableAttendu`, `dateLimiteLivrableAttendu`, `retardAutoriseLivrableAttendu`, `idDevoir`) 
+        VALUES
+        ('Livrable 1', '2013-02-20 20:00:00', true, 1),
+        ('Livrable 2', '2013-02-21 00:00:00', true, 1),
+        ('Livrable 3', '2013-03-13 00:00:00', true, 1),
+        ('Livrable 4', '2013-03-15 18:30:00', true, 1),
+        ('Livrable 5', '2013-03-18 18:00:00', true, 1),
+        ('Livrable 6', '2013-03-21 18:00:00', true, 1),
+        ('Livrable 7', '2013-03-22 00:00:00', true, 1),
+        ('Livrable 8', '2013-11-13 00:00:00', false, 2);
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `Groupe`;
+CREATE TABLE IF NOT EXISTS `Groupe`(
+        `idGroupe` int(11) NOT NULL AUTO_INCREMENT,
+        `libelleGroupe` Varchar(64) NOT NULL,
+        `commentaireGroupe` Varchar(255),
+        `idEtudiantResponsable` int(11) NOT NULL,
+        `idDevoir` int(11) NOT NULL,
+        PRIMARY KEY (`idGroupe`),
+        CONSTRAINT `FK_Groupe_idEtudiantResponsable` 
+            FOREIGN KEY (`idEtudiantResponsable`) 
+            REFERENCES Etudiant(`idEtudiant`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+        CONSTRAINT `FK_Groupe_idDevoir` 
+            FOREIGN KEY (`idDevoir`) 
+            REFERENCES Devoir(`idDevoir`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+LOCK TABLES `Groupe` WRITE;
+        INSERT INTO `Groupe` 
+        (`libelleGroupe`,`commentaireGroupe`, `idEtudiantResponsable`, `idDevoir`) 
+        VALUES
+        ('Gr1', "sujet très bien maitrisé", 1, 1),
+        ('Gr2', "bien joué", 5, 1),
+        ('Gr3', "beau gosse", 9, 1),
+        ('Gr4', "un petit neuf sur 10", 13, 1),
+        ('Gr5', "ah ben je m'en bat les couilles aussi comme là", 17, 1),
+        ('Etu1', "c'est quoi le rapport en fait?", 21, 1),
+        ('Etu2', null, 22, 1),
+        ('Etu3', "sous l'océan", 23, 1),
+        ('Etu4', null, 24, 1),
+        ('Etu5', null, 25, 1),
+        ('Etu6', "tékatikatam, tékatikatam", 26, 1),
+        ('Etu7', null, 27, 1),
+        ('Etu8', null, 28, 1),
+        ('Etu9', null, 29, 1),
+        ('Etu10', null, 30, 1),
+        ('Etu11', null, 31, 1),
+        ('Etu12', "tacata bro, tacata", 32, 1),
+        ('Etu13', null, 33, 1),
+        ('Etu14', null, 34, 1),
+        ('Etu15', null, 35, 1),
+        ('Etu16', "b hgyj gynu,j;ki;ugbvtfcdetvghybnjui", 36, 1),
+        ('Etu1D2', null, 1, 2);
+UNLOCK TABLES;
+
+
+
+
+DROP TABLE IF EXISTS `Administrateur`;
+CREATE TABLE IF NOT EXISTS `Administrateur`(
+        `idAdministrateur`          int(11) NOT NULL AUTO_INCREMENT,
+        `identifiantAdministrateur` Varchar(64) NOT NULL,
+        `mdpAdministrateur`         Varchar(255) NOT NULL,
+        `nomAdministrateur`         Varchar(64) NOT NULL,
+        `prenomAdministrateur`      Varchar(64) NOT NULL,
+        `emailAdministrateur`       Varchar(128) NOT NULL,
+        PRIMARY KEY (`idAdministrateur`),
+        UNIQUE KEY (`identifiantAdministrateur`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Administrateur` WRITE;
+        INSERT INTO `Administrateur` 
+        (`identifiantAdministrateur`, `mdpAdministrateur`, `nomAdministrateur`, `prenomAdministrateur`, `emailAdministrateur`) 
+        VALUES
+        ('mhelias', sha1(123), 'Helias', 'Maxime', 'mhelias@admin.univ-poitiers.com'),
+        ('dguerry', sha1(123), 'Guerry', 'David', 'dguerry@admin.univ-poitiers.com'),
+        ('amady', sha1(123), 'Mady', 'Antoine', 'amady@admin.univ-poitiers.com'),
+        ('ddesmay', sha1(123), 'Desmay', 'Bamien', 'ddesmay@admin.univ-poitiers.com');
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `Possede`;
+CREATE TABLE IF NOT EXISTS `Possede`(
+        `idFormation` int(11) NOT NULL,
+        `idMatiere`   int(11) NOT NULL,
+        PRIMARY KEY (`idFormation`, `idMatiere`),
+        CONSTRAINT `FK_Possede_idFormation` 
+            FOREIGN KEY (`idFormation`) 
+            REFERENCES Formation(`idFormation`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,  
+        CONSTRAINT `FK_Possede_idMatiere` 
+            FOREIGN KEY (`idMatiere`) 
+            REFERENCES Matiere(`idMatiere`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Possede` WRITE;
+        INSERT INTO `Possede` 
+        (`idFormation`, `idMatiere`) 
+        VALUES
+        (1, 1),
+        (1, 2),
+        (1, 3),
+        (1, 4),
+        (2, 1),
+        (2, 2),
+        (2, 3),
+        (2, 4),
+        (3, 2),
+        (4, 1),
+        (4, 2),
+        (4, 3),
+        (4, 4),
+        (5, 2),
+        (5, 3),
+        (6, 2),
+        (6, 3),
+        (7, 2),
+        (7, 3),
+        (8, 2),
+        (9, 2);
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `Enseigne`;
+CREATE TABLE IF NOT EXISTS `Enseigne`(
+        `idMatiere`    int(11) NOT NULL,
+        `idEnseignant` int(11) NOT NULL,
+        PRIMARY KEY (`idMatiere`, `idEnseignant`),
+        CONSTRAINT `FK_Enseigne_idMatiere` 
+                FOREIGN KEY (`idMatiere`) 
+                REFERENCES Matiere(`idMatiere`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+        CONSTRAINT `FK_Enseigne_idEnseignant` 
+                FOREIGN KEY (`idEnseignant`) 
+                REFERENCES Enseignant(`idEnseignant`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Enseigne` WRITE;
+        INSERT INTO `Enseigne` 
+        (`idMatiere`, `idEnseignant`) 
+        VALUES
+        (1, 1),
+        (2, 2),
+        (3, 4),
+        (4, 5);
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `Consulte`;
+CREATE TABLE IF NOT EXISTS `Consulte`(
+        `idDevoir`    int(11) NOT NULL,
+        `idEtudiant` int(11) NOT NULL,
+        PRIMARY KEY (`idDevoir`, `idEtudiant`),
+        CONSTRAINT `FK_Consulte_idDevoir` 
+            FOREIGN KEY (`idDevoir`) 
+            REFERENCES Devoir(`idDevoir`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+        CONSTRAINT `FK_Consulte_idEtudiant` 
+            FOREIGN KEY (`idEtudiant`) 
+            REFERENCES Etudiant(`idEtudiant`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Consulte` WRITE;
+        INSERT INTO `Consulte` 
+        (`idDevoir`, `idEtudiant`) 
+        VALUES
+        (1, 1),
+        (1, 2),
+        (1, 3),
+        (1, 4),
+        (1, 5),
+        (1, 6),
+        (1, 7),
+        (1, 8),
+        (1, 9),
+        (1, 10),
+        (1, 11),
+        (1, 12),
+        (1, 13),
+        (1, 14),
+        (1, 15),
+        (1, 16),
+        (1, 17),
+        (1, 18),
+        (1, 19),
+        (1, 20),
+        (2, 21),
+        (2, 22),
+        (2, 23),
+        (2, 24),
+        (2, 25),
+        (2, 26),
+        (2, 27),
+        (2, 28),
+        (2, 29),
+        (2, 20),
+        (2, 31),
+        (2, 32),
+        (2, 33),
+        (2, 34),
+        (2, 35),
+        (2, 36);
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `Appartient`;
+CREATE TABLE IF NOT EXISTS `Appartient`(
+        `note`       Float,
+        `idEtudiant` int(11) NOT NULL,
+        `idGroupe`   int(11) NOT NULL,
+        PRIMARY KEY (`idEtudiant`, `idGroupe`),
+        CONSTRAINT `FK_Appartient_idEtudiant` 
+            FOREIGN KEY (`idEtudiant`) 
+            REFERENCES Etudiant(`idEtudiant`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+        CONSTRAINT `FK_Appartient_idGroupe` 
+            FOREIGN KEY (`idGroupe`) 
+            REFERENCES Groupe(`idGroupe`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Appartient` WRITE;
+        INSERT INTO `Appartient` 
+        (`note`, `idEtudiant`, `idGroupe`) 
+        VALUES
+        (14, 1, 1),
+        (14, 2, 1),
+        (14, 3, 1),
+        (14, 4, 1),
+        (18, 5, 2),
+        (18, 6, 2),
+        (18, 7, 2),
+        (18, 8, 2),
+        (11, 9, 3),
+        (11, 10, 3),
+        (11, 11, 3),
+        (11, 12, 3),
+        (13, 13, 4),
+        (13, 14, 4),
+        (13, 15, 4),
+        (13, 16, 4),
+        (10, 17, 5),
+        (10, 18, 5),
+        (10, 19, 5),
+        (10, 20, 5),
+        (13, 21, 6),
+        (15, 22, 7),
+        (16, 23, 8),
+        (13, 24, 9),
+        (14, 25, 10),
+        (15, 26, 11),
+        (12, 27, 12),
+        (11, 28, 13),
+        (13, 29, 14),
+        (12, 30, 15),
+        (12, 31, 16),
+        (16, 32, 17),
+        (11, 33, 18),
+        (14, 34, 19),
+        (9, 35, 20),
+        (10, 36, 21),
+        (null, 1, 22);
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `CreerDevoir`;
+CREATE TABLE IF NOT EXISTS `CreerDevoir`(
+        `idEnseignant` int(11) NOT NULL,
+        `idDevoir`     int(11) NOT NULL,
+        PRIMARY KEY (`idEnseignant`, `idDevoir`),
+        CONSTRAINT `FK_CreerDevoir_idEnseignant` 
+            FOREIGN KEY (`idEnseignant`) 
+            REFERENCES Enseignant(`idEnseignant`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+        CONSTRAINT `FK_CreerDevoir_idDevoir` 
+            FOREIGN KEY (`idDevoir`) 
+            REFERENCES Devoir(`idDevoir`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `CreerDevoir` WRITE;
+        INSERT INTO `CreerDevoir` 
+        (`idEnseignant`, `idDevoir`) 
+        VALUES
+        (1, 1),
+        (2, 2);
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `LivrableRendu`;
+CREATE TABLE IF NOT EXISTS `LivrableRendu`(
+        `dateSoumissionLivrableRendu` Datetime,
+        `fichierLivrableRendu`   Varchar(255),
+        `idGroupe`               int(11) NOT NULL,
+        `idLivrableAttendu`      int(11) NOT NULL,
+        PRIMARY KEY (`idGroupe`, `idLivrableAttendu`),
+        CONSTRAINT `FK_LivrableRendu_idGroupe` 
+                FOREIGN KEY (`idGroupe`) 
+                REFERENCES Groupe(`idGroupe`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+        CONSTRAINT `FK_LivrableRendu_idLivrableAttendu` 
+                FOREIGN KEY (`idLivrableAttendu`) 
+                REFERENCES LivrableAttendu(`idLivrableAttendu`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `LivrableRendu` WRITE;
+        INSERT INTO `LivrableRendu` 
+        (`fichierLivrableRendu`, `dateSoumissionLivrableRendu`, `idGroupe`, `idLivrableAttendu`) 
+        VALUES
+        ('fichierLivrableRendu1', '2013-02-21 01:00:00', 1, 1),
+        ('fichierLivrableRendu1', '2013-02-20 15:59:00', 2, 1),
+        ('fichierLivrableRendu1', '2013-02-20 16:03:00', 3, 1),
+        ('fichierLivrableRendu1', '2013-02-20 16:04:00', 4, 1),
+        ('fichierLivrableRendu1', '2013-02-20 16:03:00', 5, 1),
+        ('fichierLivrableRendu2', '2013-02-21 21:34:00', 1, 2),
+        ('fichierLivrableRendu2', '2013-02-21 17:50:00', 2, 2),
+        ('fichierLivrableRendu2', '2013-02-21 19:16:00', 3, 2),
+        ('fichierLivrableRendu2', '2013-03-11 16:36:00', 4, 2),
+        ('fichierLivrableRendu2', '2013-02-21 17:31:00', 5, 2),
+        ('fichierLivrableRendu3', '2013-03-15 11:17:00', 1, 3),
+        ('fichierLivrableRendu3', '2013-03-14 09:00:00', 2, 3),
+        ('fichierLivrableRendu3', '2013-03-14 11:07:00', 3, 3),
+        ('fichierLivrableRendu3', '2013-03-14 17:21:00', 4, 3),
+        ('fichierLivrableRendu3', '2013-03-15 11:40:00', 5, 3),
+        ('fichierLivrableRendu4', '2013-03-15 11:35:00', 1, 4),
+        ('fichierLivrableRendu4', '2013-03-14 18:07:00', 2, 4),
+        ('fichierLivrableRendu4', '2013-03-15 18:07:00', 3, 4),
+        ('fichierLivrableRendu5', '2013-03-18 17:28:00', 1, 5),
+        ('fichierLivrableRendu5', '2013-03-18 21:03:00', 2, 5),
+        ('fichierLivrableRendu5', '2013-03-18 17:48:00', 3, 5),
+        ('fichierLivrableRendu5', '2013-03-19 10:20:00', 4, 5),
+        ('fichierLivrableRendu5', '2013-03-19 11:00:00', 5, 5),
+        ('fichierLivrableRendu6', '2013-03-23 12:20:00', 1, 6),
+        ('fichierLivrableRendu6', '2013-03-22 17:41:00', 3, 6),
+        ('fichierLivrableRendu7', '2013-03-22 19:39:00', 1, 7),
+        ('fichierLivrableRendu7', '2013-03-22 19:35:00', 2, 7),
+        ('fichierLivrableRendu7', '2013-03-22 23:47:00', 3, 7),
+        ('fichierLivrableRendu7', '2013-03-22 17:00:00', 4, 7),
+        ('fichierLivrableRendu7', '2013-03-22 22:35:00', 5, 7),
+        ('fichierLivrableRenduEtu1', '2013-11-13 10:19:00', 6, 8),
+        ('fichierLivrableRenduEtu2', '2013-11-13 10:16:00', 7, 8),
+        ('fichierLivrableRenduEtu3', '2013-11-13 09:44:00', 8, 8),
+        ('fichierLivrableRenduEtu4', '2013-11-13 10:15:00', 9, 8),
+        ('fichierLivrableRenduEtu5', '2013-11-13 10:17:00', 10, 8),
+        ('fichierLivrableRenduEtu6', '2013-11-13 10:19:00', 11, 8),
+        ('fichierLivrableRenduEtu7', '2013-11-13 10:20:00', 12, 8),
+        ('fichierLivrableRenduEtu8', '2013-11-13 10:20:00', 13, 8),
+        ('fichierLivrableRenduEtu9', '2013-11-13 10:16:00', 14, 8),
+        ('fichierLivrableRenduEtu10', '2013-11-13 10:22:00', 15, 8),
+        ('fichierLivrableRenduEtu11', '2013-11-13 10:22:00', 16, 8),
+        ('fichierLivrableRenduEtu12', '2013-11-13 10:19:00', 17, 8),
+        ('fichierLivrableRenduEtu13', '2013-11-13 10:17:00', 18, 8),
+        ('fichierLivrableRenduEtu14', '2013-11-13 10:19:00', 19, 8),
+        ('fichierLivrableRenduEtu15', '2013-11-13 10:16:00', 20, 8);
+UNLOCK TABLES;
+
+
+#------------------------------------------------------------
+#        Fin du script MySQL
+#------------------------------------------------------------

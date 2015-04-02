@@ -1,0 +1,28 @@
+<!-- <div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="panel-group" id="panel-matiere">
+	 -->
+<select class="selectpicker show-menu-arrow" title="Selection du devoir" data-size="10" data-live-search="true" data-width="100%" id="Devoir" name="Devoir">
+	<option value="default" id="default">
+		Choisir un devoir
+	</option>
+	<?php
+	foreach ($devoirsEnseignant as $idDevoir) 
+	{
+		$devoir = new Devoir($idDevoir["devoir"]);
+		?>
+				<option value="<?= $devoir->getIdDevoir() ?>">
+					<?= $devoir->getLibelleDevoir() ?>
+				</option>
+	<?php
+	}
+	?>
+</select>
+<br/>
+<br/>
+<br/>
+<br/>
+<div class="text-center">
+	<canvas id="myChart" width="1000" height="400"></canvas>
+</div>

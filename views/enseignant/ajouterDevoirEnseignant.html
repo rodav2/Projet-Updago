@@ -1,0 +1,268 @@
+<br/>
+<br/>
+<br/>
+<div class="container">
+<h1>
+    Créer un nouveau devoir
+</h1>
+
+
+
+    <h5 id="msgErreur" style="color:red; font-weight: bold;"><?= $msgErreur ?></h5>
+    <fieldset class="scheduler-border">
+        <legend id="etape1" class="scheduler-border "><b>1- Informations générales</b> <img id="imgOkInfoG" src="http://t1.ftcdn.net/jpg/00/31/36/66/110_F_31366698_Gi6drsMJQ9qUuftekDLeOgss17Eck67q.jpg" width="30"/></legend>
+        <div class="row clearfix">
+            <div class="col-md-10 column">
+                <form class="form-horizontal" action="" method="post" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Nom du devoir * : </label>
+                        <div class="col-sm-8">
+                            <input type="text" placeholder="(Exemple : Compte rendu TP)" name="nomDevoir"  class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Description : </label>
+                        <div class="col-sm-8">
+                            <textarea style="resize:none" placeholder="Description du devoir ..." name="descriptionDevoir"  class="form-control" ></textarea>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-4 control-label'>Date / Heure limite correction : </label>
+                        <div class='col-sm-4'>
+                            <input type='date' placeholder='Date (jj/mm/aaaa)' title='Date de correction au plus tard.' name='dateCorrection' class='form-control'  />
+                        </div>
+                        <div class='col-sm-3'>
+                            <input type='time' placeholder='Heure (hh:mm)' title='Heure de correction au plus tard.' name='heureCorrection' class='form-control'  />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Nom de la matière * : </label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="matiere" name="matiere">
+                                <option value="-1">Choix de la matière ...</option>
+                                <?php
+                                foreach ($lesMatieres as $uneMatiere) {
+                             ?>
+                                <option value="<?= $uneMatiere->getIdMatiere() ?>"> <?= $uneMatiere->getLibelleMatiere() ?> </option>
+                                <?php
+                            }
+                            ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="divLivrable">
+                        <label class="col-sm-4 control-label">Nombre de livrable * : </label>
+                        <div class="col-sm-2">
+                            <select id="nbLivrable" name="nbLivrable" class="form-control">
+                                <option id="-1" value="-1">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="livrable">
+
+                    </div>
+
+                    <legend class="scheduler-border"><b>2- Enseignants </b> <img id="imgOkEnseignant" src="http://t1.ftcdn.net/jpg/00/31/36/66/110_F_31366698_Gi6drsMJQ9qUuftekDLeOgss17Eck67q.jpg" width="30"/> </legend>
+
+                    <div class="form-group" id="divEnseignant">
+                        <p>Veuillez sélectionner le ou les enseignants autorisés à accéder au devoir ainsi qu'un enseignant responsable.</p>
+                        <label class="col-sm-1 control-label"></label>
+                        <div class="col-sm-11 text-center">
+                            <div id="listeEnseignant" class="col-sm-11">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <legend class="scheduler-border"><b>3- Etudiants </b> <img id="imgOkEtudiant" src="http://t1.ftcdn.net/jpg/00/31/36/66/110_F_31366698_Gi6drsMJQ9qUuftekDLeOgss17Eck67q.jpg" width="30"/> </legend>
+
+
+                    <div id="divEtudiant">
+
+                        <div class="form-group"  >
+                            <p>Veuillez sélectionner le ou les étudiants concernés pour ce devoirs.</p>
+
+                        <label class="col-sm-4 control-label">Liste des formations * : </label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="listeFormation" name="idFormation">
+
+                            </select>
+                        </div>
+                            </div>
+                            <div class="form-group" id="radioGroupe" >
+
+
+                                <label class="col-sm-4 control-label">Devoir en groupe : </label>
+                                <div class="col-sm-3">
+                                    <input type="radio"  name="enGroupe" id="groupeOui" value="1" /> Oui <br/>
+                                    <input type="radio"  name="enGroupe" id="groupeNon" value="0"  /> Non
+                                </div>
+                            </div>
+                        <div class="form-group" id="nbGroupe" >
+
+                            <label class="col-sm-4 control-label">Nombre de groupe : </label>
+                            <div class="col-sm-3">
+                                <select id="nbGroupeChoix" name="nbGroupeChoix" class="form-control">
+                                    <option id="-1" value="-1">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <label class="col-sm-1 control-label"></label>
+                            <div class="col-sm-10">
+                                <div id="listeEtudiant">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center" id="choixEtud">
+
+                        </div>
+                    </div>
+                        </div>
+            </div>
+    </fieldset>
+
+    <div class="form-group">
+        <div class="col-md-12 column text-center">
+            <br/><br/>
+            <input type="hidden" value="ajoutDevoir" name="ajoutDevoir" />
+            <button type="submit" id="btnValid" class=" btn btn-primary ">Valider</button>
+        </div>
+    </div>
+
+    </form>
+
+</div>
+<!--
+<script type="text/javascript">
+    $( document ).ready(function() {
+       $("#divEnseignant").hide();
+       $("#divEtudiant").hide();
+
+       $( "#matiere").change(function() {
+        if ($("#matiere").val() != -1 && $("#nbLivrable").val() != -1 ) {
+            $("#divEnseignant").show();
+            getEnseignant($("#matiere").val());
+        } else {
+            $("#divEnseignant").hide();
+        }
+    });
+
+       $( "#nbLivrable").change(function() {
+        if ($("#nbLivrable").val() != -1 && $("#matiere").val() != -1 ) {
+            $("#divEnseignant").show();
+            getEnseignant($("#matiere").val());
+        } else {
+            $("#divEnseignant").hide();
+        }
+    });
+
+       $( "#nbLivrable").change(function() {
+           var nbLivrable= $("#nbLivrable").val();
+           var html = "";
+           $("#livrable").empty();
+           for (var i = 1 ; i <= nbLivrable ; i++ ) {
+
+            html = "<div class='col-md-2 column'></div>";
+            html += "<div class='col-md-10 column'>";
+            html += " <fieldset class='scheduler-border'>";
+            html += "<legend class='scheduler-border'> - Livrable n°"+ i +"</legend>";
+            html += " <div class='form-group'>";
+            html += "<label class='col-sm-4 control-label'>Intitulé du livrable : </label>";
+            html += "<div class='col-sm-8'>";
+            html += "<input type='text' name='intituleLivrable" + i + "' placeholder='(Exemple : MCD)'  class='form-control' id='inputPassword3' />";
+            html += " </div>" ;
+            html += "</div>";
+            html += " <div class='form-group'>";
+            html += "<label class='col-sm-4 control-label'>Date / Heure limite : </label>";
+            html += "<div class='col-sm-4'>";
+            html += "<input type='date' placeholder='Date (jj/mm/aaaa)' title='Date de remise au plus tard.' class='form-control' id='inputPassword3' />";
+            html += " </div>" ;
+            html += " <div class='col-sm-3'>";
+            html += " <input type='time' placeholder='Heure (hh:mm)' title='Heure de remise au plus tard.' class='form-control' id='inputPassword3' />";
+            html += "</div>";
+            html += "</div>";
+            html += "<div class='form-group'>";
+            html += " <label class='col-sm-4 control-label'>Type de fichier : </label>";
+            html += "<label class='col-sm-1 control-label'> </label>";
+            html += "<div class='col-sm-2'>";
+            html += "<div class='checkbox'>";
+            html += "<input type='checkbox' checked name='typeFichier' value='pdf' />pdf <br />";
+            html += "<input type='checkbox' checked name='typeFichier' value='doc' />doc (Word)<br />";
+            html += "<input type='checkbox' checked name='typeFichier' value='zip' />zip<br />";
+            html += " </div>";
+            html += " </div>";
+            html += "</fieldset>";
+            html += " </div>";
+            $("#livrable").append(html);
+        }
+
+        $("#livrable").append("<br/><br/>");
+    });
+});
+
+$( "#enseignant").change(function() {
+    $("#listeEnseignant").append($("#enseignant").text() + "<br/>");
+});
+
+
+function getEnseignant(uneMatiere){
+    $("#etape1").add("class")
+    $.ajax({
+        async: "true",
+        type: "POST",
+        url: "./global/lib/listeEnseignant.php",
+        data: "idEnseignant="+ uneMatiere,
+        dataType: "json",
+        error: function(errorData) {
+            alert(errorData);
+
+        },
+        success: function(data) {
+            var html = "";
+            $("#listeEnseignant").empty();
+            $("#enseignant").append('<option value="-1">...</option>');
+            $.each(data, function(key, value) {
+                    //$("#enseignant").append('<option value="'+ key +'">'+ value +'</option>');
+                    html = "<div class='checkbox'>";
+
+                    html += "<input type='checkbox' name='idEnseignant' value='"+ key +"' />"+ value +" <br />";
+                    html += "</div>";
+                    $("#listeEnseignant").append(html);
+
+                });
+        }
+    });
+}
+</script>
+-->

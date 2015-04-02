@@ -1,0 +1,385 @@
+
+<div class="container">
+
+    <h1>
+        Evaluer les devoirs
+    </h1>
+    <?php
+    if (!empty($msgValidation)) {
+    ?>
+    <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Félicitation ! </strong>  <?= $msgValidation ?>
+    </div>
+    <?php
+    }
+    if (!empty($msgErreur)) {
+    ?>
+    <div class="alert alert-error">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Erreur ! </strong><?= $msgErreur ?>
+    </div>
+    <?php
+    }
+    ?>
+    <h3>
+        <b>• Devoirs récents  </b>
+    </h3><br/>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="panel-group" id="panel-975187">
+                <?php
+                foreach($lesDevoirsNonNotes as $unDevoir) {
+                $lesLivrablesAttendus = LivrableAttendu::getLivrableAttendusDevoir($unDevoir[0]->getIdDevoir());
+                ?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-975187" href="#panel-element-658513<?=$unDevoir[0]->getIdDevoir()?>"><b> <?=$unDevoir[0]->getLibelleDevoir()?></b> - <?=$unDevoir[1]->getLibelleMatiere()?> </a>
+                        </div>
+                        <div id="panel-element-658513<?=$unDevoir[0]->getIdDevoir()?>" class="panel-collapse collapse">
+                            <?php
+                            if (! $unDevoir[0]->getIndividuelDevoir()) {
+                                foreach ($unDevoir[2] as $unGroupe) {
+                                ?>
+                                    <div class="panel-body">
+                                        <a id="modal-102846" href="#modal-container-<?=$unGroupe[0]->getIdGroupe()?>" role="button" data-toggle="modal" > <b><?= strtoupper($unGroupe[0]->getLibelleGroupe())?> : </b></a>
+                                    </div>
+                            <!-- Modal fenêtre evalutation par groupe -->
+                            <!-- #########################################-->
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <div class="modal fade" id="modal-container-<?=$unGroupe[0]->getIdGroupe()?>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title" id="myModalLabel">
+
+                                                        <b>  Devoir du groupe <?= $unGroupe[0]->getLibelleGroupe()?></b>
+                                                        <h5>-- <?=$unDevoir[0]->getLibelleDevoir()?> --</h5>
+
+                                                    </h4>
+                                                </div>
+                                                <div class="modal-body" >
+                                                    <div class="text-center">
+                                                        <form method="post">
+                                                            <h4><b>Liste des livrables rendus </b></h4>
+                                                            <table class="table">
+                                                                <tr>
+                                                                    <th class="text-center">Intitulé</th>
+                                                                    <th class="text-center">Statut</th>
+                                                                    <th class="text-center">Fichier rendu</th>
+                                                                </tr>
+                                                                <?php
+                                                                                     $lesLivrables = LivrableRendu::getLivrableRenduGroupe($unGroupe[0]->getIdGroupe());
+                                                                foreach($lesLivrablesAttendus as $unLivrable) {
+                                                                $livrable = new LivrableAttendu($unLivrable);
+                                                                $livrableRendu = LivrableRendu::getLivrableRenduLivrableAttenduGroupe($livrable->getIdLivrableAttendu() , $unGroupe[0]->getIdGroupe());
+                                                                ?>
+                                                                <tr>
+
+                                                                    <td  class="text-left">• <?= $livrable->getLibelleLivrableAttendu()?></td>
+                                                                    <?php
+                                                                                          if($livrableRendu != null ) {
+                                                                                          ?>
+                                                                    <td class="text-center"><span class="label label-success">Rendu</span></td>
+                                                                    <td class="text-center"> <a target="_blank" href="<?= $livrableRendu[0]['fichierLivrableRendu']?>"><span class="glyphicon glyphicon-save" aria-hidden="true"></span></a> </td>
+                                                                    <?php
+                                                                                          } else {
+                                                                                          ?>
+                                                                    <td  class="text-center"><span class="label label-warning">Non rendu</span></td>
+                                                                    <td class="text-center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </td>
+                                                                    <?php
+                                                                                          }
+                                                                                          ?>
+                                                                </tr>
+
+                                                                <?php
+                                                                                    }
+                                                                                    ?>
+                                                            </table>
+                                                            <h4><b>Evaluation </b></h4>
+
+                                                            <table class="table" >
+                                                                <tr>
+                                                                    <td class="text-right"> <b>Note :</b> &nbsp </td>
+                                                                    <td class="text-left">
+                                                                        <input maxlength="5"  required type="number" min="0" max="20" step="0.1" title="Saisir une note entre 0 et 20" name="noteDevoir"/> <b>/ 20</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="text-right"> <b>Commentaire : &nbsp</b></td>
+                                                                    <td class="text-left">
+                                                                        <textarea style=" resize: none;" name="commentaireDevoir" placeholder="Remarque sur le devoir rendu ... " cols="50%" rows="5%"></textarea>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                                    <input type="submit" class="btn btn-primary" value="Enregistrer"/>
+                                                    <input type="hidden" name="evaluerParGroupe"/>
+                                                    <input type="hidden" name="idDevoir" value="<?=$unDevoir[0]->getIdDevoir()?>"/>
+                                                    <input type="hidden" name="idGroupe" value="<?=$unGroupe[0]->getIdGroupe()?>"/>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- #########################################-->
+                            <!-- FIN  fenêtre-->
+
+
+                            <?php
+                                        foreach ($unGroupe[1] as $etudiants) {
+                                            foreach ($etudiants[0] as $etudiant) {
+                                            ?>
+                                                <div class="panel-body">
+                                                    <a id="modal-102846" href="#modal-container-<?=$unDevoir[0]->getIdDevoir()?>-<?=$etudiant->getIdEtudiant()?>" role="button" data-toggle="modal" title="Evaluer <?=$etudiant->getPrenomEtudiant()?> <?=$etudiant->getNomEtudiant()?> pour le devoir <?=$unDevoir[0]->getLibelleDevoir()?>" >• <?=$etudiant->getPrenomEtudiant()?> <?=$etudiant->getNomEtudiant()?></a>
+                                                    <?php
+                                             
+                                                if (!empty($etudiants[1][0])) {
+                                                ?>
+                                                    <span class="pull-right label label-success"> <b> <?=$etudiants[1][0]?> / 20</b></span>
+                                                    <?php
+                                                } else {
+                                                ?>
+                                                    <span class="pull-right label label-warning">Non évalué</span>
+                                                    <?php
+                                                }
+                                                ?>
+                                                    <!-- Modal fenêtre évaluation par étudiant par groupe -->
+                                                    <!-- #########################################-->
+                                                    <div class="row clearfix">
+                                                        <div class="col-md-12 column">
+                                                            <div class="modal fade" id="modal-container-<?=$unDevoir[0]->getIdDevoir()?>-<?=$etudiant->getIdEtudiant()?>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                            <h4 class="modal-title" id="myModalLabel">
+
+                                                                              <b>  Devoir de <?=$etudiant->getPrenomEtudiant()?> <?=$etudiant->getNomEtudiant()?> </b> - (Groupe : <?= $unGroupe[0]->getLibelleGroupe()?>)
+                                                                                <h5>-- <?=$unDevoir[0]->getLibelleDevoir()?> --</h5>
+
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div class="modal-body" >
+                                                                            <div class="text-center">
+                                                                                <form method="post">
+                                                                                    <h4><b>Liste des livrables rendus </b></h4>
+                                                                                    <table class="table">
+                                                                                        <tr>
+                                                                                            <th class="text-center">Intitulé</th>
+                                                                                            <th class="text-center">Statut</th>
+                                                                                            <th class="text-center">Fichier rendu</th>
+                                                                                        </tr>
+                                                                                      <?php
+                                                                                     $lesLivrables = LivrableRendu::getLivrableRenduGroupe($unGroupe[0]->getIdGroupe());
+                                                                                    foreach($lesLivrablesAttendus as $unLivrable) {
+                                                                                    $livrable = new LivrableAttendu($unLivrable);
+                                                                                        $livrableRendu = LivrableRendu::getLivrableRenduLivrableAttenduGroupe($livrable->getIdLivrableAttendu() , $unGroupe[0]->getIdGroupe());
+                                                                                        ?>
+                                                                                        <tr>
+                                                                                            <td  class="text-left">• <?= $livrable->getLibelleLivrableAttendu()?></td>
+                                                                                          <?php
+                                                                                          if($livrableRendu != null ) {
+                                                                                          ?>
+                                                                                            <td class="text-center"><span class="label label-success">Rendu</span></td>
+                                                                                            <td class="text-center"> <a target="_blank" href="<?= $livrableRendu[0]['fichierLivrableRendu']?>"><span class="glyphicon glyphicon-save" aria-hidden="true"></span></a> </td>
+                                                                                            <?php
+                                                                                          } else {
+                                                                                          ?>
+                                                                                            <td  class="text-center"><span class="label label-warning">Non rendu</span></td>
+                                                                                            <td class="text-center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </td>
+                                                                                            <?php
+                                                                                          }
+                                                                                          ?>
+                                                                                        </tr>
+
+                                                                                    <?php
+                                                                                    }
+                                                                                    ?>
+                                                                                    </table>
+                                                                                    <h4><b>Evaluation </b></h4>
+
+                                                                                             <b>Note :</b> &nbsp
+                                                                                                <input maxlength="5"  value="<?=$etudiants[1][0]?>" class="text-right" required type="number" min="0" max="20" step="0.5" title="Saisir une note entre 0 et 20" name="noteDevoir" />  <b>/ 20</b>
+
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="modal-footer">
+
+                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                                                                <input type="submit" class="btn btn-primary" value="Enregistrer"/>
+                                                                                <input type="hidden" name="evaluer"/>
+                                                                            <input type="hidden" name="idDevoir" value="<?=$unDevoir[0]->getIdDevoir()?>"/>
+                                                                            <input type="hidden" name="idGroupe" value="<?=$unGroupe[0]->getIdGroupe()?>"/>
+                                                                            <input type="hidden" name="idEtudiant" value="<?=$etudiant->getIdEtudiant()?>"/>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- #########################################-->
+                                                    <!-- FIN  fenêtre-->
+
+
+                                                </div>
+
+                                            <?php
+                                            }
+                                        }
+                                              ?>
+                                    <div class="panel-body">
+                                        &nbsp
+                                    </div>
+                                <?php
+                                }
+                            } else {
+                                foreach ($unDevoir[2] as $unGroupe) {
+                                    foreach ($unGroupe[1] as $etudiants) {
+                                        foreach ($etudiants[0] as $etudiant) {
+                                        ?>
+                                            <div class="panel-body">
+
+                                                <a id="modal-102846" href="#modal-container-<?=$unDevoir[0]->getIdDevoir()?>-<?=$etudiant->getIdEtudiant()?>" role="button" data-toggle="modal" title="Evaluer <?=$etudiant->getPrenomEtudiant()?> <?=$etudiant->getNomEtudiant()?> pour le devoir <?=$unDevoir[0]->getLibelleDevoir()?>" >• <?=$etudiant->getPrenomEtudiant()?> <?=$etudiant->getNomEtudiant()?></a>
+
+                                                <?php
+                                                if (!empty($etudiants[1][0])) {
+                                                ?>
+                                                <span class="pull-right label label-success"> <b><?=$etudiants[1][0]?> / 20</b></span>
+                                                <?php
+                                                } else {
+                                                ?>
+                                                <span class="pull-right label label-warning">Non évalué</span>
+                                                <?php
+                                                }
+                                                ?>
+                                        <!-- Modal fenêtre évaluation par étudiant -->
+                                                <!-- #########################################-->
+                                                <div class="row clearfix">
+                                                    <div class="col-md-12 column">
+                                                        <div class="modal fade" id="modal-container-<?=$unDevoir[0]->getIdDevoir()?>-<?=$etudiant->getIdEtudiant()?>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                        <h4 class="modal-title" id="myModalLabel">
+
+                                                                            <b>  Devoir de <?=$etudiant->getPrenomEtudiant()?> <?=$etudiant->getNomEtudiant()?> </b>
+                                                                            <h5>-- <?=$unDevoir[0]->getLibelleDevoir()?> --</h5>
+
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div class="modal-body" >
+                                                                        <div class="text-center">
+                                                                            <form method="post">
+                                                                                <h4><b>Liste des livrables rendus </b></h4>
+                                                                                <table class="table">
+                                                                                    <tr>
+                                                                                        <th class="text-center">Intitulé</th>
+                                                                                        <th class="text-center">Statut</th>
+                                                                                        <th class="text-center">Fichier rendu</th>
+                                                                                    </tr>
+                                                                                    <?php
+                                                                                     $lesLivrables = LivrableRendu::getLivrableRenduGroupe($unGroupe[0]->getIdGroupe());
+                                                                                    foreach($lesLivrablesAttendus as $unLivrable) {
+                                                                                    $livrable = new LivrableAttendu($unLivrable);
+                                                                                    $livrableRendu = LivrableRendu::getLivrableRenduLivrableAttenduGroupe($livrable->getIdLivrableAttendu() , $unGroupe[0]->getIdGroupe());
+                                                                                    ?>
+                                                                                    <tr>
+                                                                                        <td  class="text-left">• <?= $livrable->getLibelleLivrableAttendu()?></td>
+                                                                                        <?php
+                                                                                          if($livrableRendu != null ) {
+                                                                                          ?>
+                                                                                        <td class="text-center"><span class="label label-success">Rendu</span></td>
+                                                                                        <td class="text-center"> <a target="_blank" href="<?= $livrableRendu[0]['fichierLivrableRendu']?>"><span class="glyphicon glyphicon-save" aria-hidden="true"></span></a> </td>
+                                                                                        <?php
+                                                                                          } else {
+                                                                                          ?>
+                                                                                        <td  class="text-center"><span class="label label-warning">Non rendu</span></td>
+                                                                                        <td class="text-center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </td>
+                                                                                        <?php
+                                                                                          }
+                                                                                          ?>
+                                                                                    </tr>
+
+                                                                                    <?php
+                                                                                    }
+                                                                                    ?>
+                                                                                </table>
+                                                                                <h4><b>Evaluation </b></h4>
+                                                                                <table class="table" >
+                                                                                    <tr>
+                                                                                        <td class="text-right"> <b>Note :</b> &nbsp </td>
+                                                                                        <td class="text-left">
+                                                                                            <input maxlength="5" vocab="<?=$etudiants[1][0]?>" class="text-right" value="<?=$etudiants[1][0]?>"  required type="number" min="0" max="20" step="0.1" title="Saisir une note entre 0 et 20" name="noteDevoir"/> <b>/ 20</b>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td class="text-right"> <b>Commentaire : &nbsp</b></td>
+                                                                                        <td class="text-left">
+                                                                                            <textarea style=" resize: none;"  placeholder="Remarque sur le devoir rendu ... " cols="50%" name="commentaireDevoir" rows="5%"><?= $unGroupe[0]->getCommentaireGroupe() ?> </textarea>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="modal-footer">
+
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                                                        <input type="submit" class="btn btn-primary" value="Enregistrer"/>
+
+                                                                        <input type="hidden" name="evaluer"/>
+                                                                        <input type="hidden" name="idDevoir" value="<?=$unDevoir[0]->getIdDevoir()?>"/>
+                                                                        <input type="hidden" name="idGroupe" value="<?=$unGroupe[0]->getIdGroupe()?>"/>
+                                                                        <input type="hidden" name="idEtudiant" value="<?=$etudiant->getIdEtudiant()?>"/>
+
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- #########################################-->
+                                                <!-- FIN  fenêtre-->
+
+
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <h3>
+        <b>• Devoirs anciens </b>
+        <p>...</p>
+    </h3>
+
+</div>
+
+
